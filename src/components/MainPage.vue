@@ -15,6 +15,8 @@
       :page-count="pageCount"
       @nextPage="pageChangeHandle('next')"
       @previousPage="pageChangeHandle('previous')"
+      @firstPage="pageChangeHandle('first')"
+      @lastPage="pageChangeHandle('last')"
       @loadPage="pageChangeHandle"
     />
   </main>
@@ -73,6 +75,12 @@ export default {
           break;
         case "previous":
           this.currentPage -= 1;
+          break;
+        case "first":
+          this.currentPage = 1;
+          break;
+        case "last":
+          this.currentPage = this.pageCount - 1;
           break;
         default:
           this.currentPage = value;
