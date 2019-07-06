@@ -3,19 +3,14 @@
     <button :disabled="isPreviousButtonDisabled" @click="previousPage">
       Previous
     </button>
-    <BasePaginationNumbers :pageNumber="currentPage" @loadPage="onLoadPage" />
     <button :disabled="isNextButtonDisabled" @click="nextPage">
       Next
     </button>
   </div>
 </template>
 <script>
-import BasePaginationNumbers from "./BasePaginationNumbers.vue";
 export default {
   name: "BasePagination",
-  components: {
-    BasePaginationNumbers
-  },
   props: {
     currentPage: {
       type: Number,
@@ -40,9 +35,6 @@ export default {
     },
     previousPage() {
       this.$emit("previousPage");
-    },
-    onLoadPage(value) {
-      this.$emit("loadPage", value);
     }
   }
 };
