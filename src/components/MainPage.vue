@@ -77,9 +77,10 @@ export default {
         default:
           this.currentPage = value;
       }
+      // carve out the portion of the games array that should be displayed per page
       this.shownGames = this.games.slice(
-        this.currentPage,
-        this.currentPage * visibleItems
+        this.currentPage * visibleItems,
+        this.currentPage * visibleItems + visibleItems
       );
     }
   }

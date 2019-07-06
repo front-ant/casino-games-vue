@@ -1,24 +1,19 @@
 <template>
   <div class="base-pagination">
-    <BaseButton
-      :disabled="isPreviousButtonDisabled"
-      @click.native="previousPage"
-    >
+    <button :disabled="isPreviousButtonDisabled" @click="previousPage">
       Previous
-    </BaseButton>
+    </button>
     <BasePaginationNumbers :pageNumber="currentPage" @loadPage="onLoadPage" />
-    <BaseButton :disabled="isNextButtonDisabled" @click.native="nextPage">
+    <button :disabled="isNextButtonDisabled" @click="nextPage">
       Next
-    </BaseButton>
+    </button>
   </div>
 </template>
 <script>
-import BaseButton from "./BaseButton.vue";
 import BasePaginationNumbers from "./BasePaginationNumbers.vue";
 export default {
   name: "BasePagination",
   components: {
-    BaseButton,
     BasePaginationNumbers
   },
   props: {
