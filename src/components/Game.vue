@@ -1,9 +1,9 @@
 <template>
   <div class="game-entry">
-    <img :src="image" class="game-img" :alt="title" />
+    <img :src="game.pic" class="game-img" :alt="game.title" />
     <div class="game-text">
-      <h3 class="game-title">{{ title }}</h3>
-      <p class="game-description">{{ description }}</p>
+      <h3 class="game-title">{{ game.title }}</h3>
+      <p class="game-description">{{ game.tagline }}</p>
     </div>
   </div>
 </template>
@@ -12,17 +12,9 @@
 export default {
   name: "Game",
   props: {
-    title: {
-      type: String,
+    game: {
+      type: Object,
       required: true
-    },
-    image: {
-      type: String,
-      required: false
-    },
-    description: {
-      type: String,
-      required: false
     }
   }
 };

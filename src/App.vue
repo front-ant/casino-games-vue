@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="login-wrapper">
+    <div class="login-wrapper" v-if="!loggedIn">
       <button
         v-for="tab in tabs"
         :key="tab"
@@ -9,9 +9,10 @@
       >
         {{ tab }}
       </button>
-      <MainPage v-if="loggedIn" @logout="toggleLogin" />
       <component :is="this.currentTab" class="tab" @submitted="toggleLogin" />
     </div>
+
+    <MainPage v-if="loggedIn" @logout="toggleLogin" />
   </div>
 </template>
 
