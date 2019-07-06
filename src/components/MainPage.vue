@@ -80,15 +80,15 @@ export default {
           this.currentPage = 1;
           break;
         case "last":
-          this.currentPage = this.pageCount - 1;
+          this.currentPage = this.pageCount;
           break;
         default:
           this.currentPage = value;
       }
       // carve out the portion of the games array that should be displayed per page
       this.shownGames = this.games.slice(
-        this.currentPage * visibleItems,
-        this.currentPage * visibleItems + visibleItems
+        this.currentPage * visibleItems - visibleItems,
+        this.currentPage * visibleItems
       );
     }
   }
