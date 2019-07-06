@@ -8,29 +8,38 @@
       <button @click="toggleStyles">Toggle View</button>
     </nav>
     <div :class="{ 'list-view': listView, 'grid-view': !listView }">
-      <Game
-        v-for="game in games"
-        :key="game.id"
-        :title="game.title"
-        :image="game.pic"
-        :description="game.tagline"
-      />
+      <Game v-for="game in shownGames" :key="game.id" :game="game" />
     </div>
+    <BasePagination
+      :current-page="currentPage"
+      :page-count="pageCount"
+      @nextPage="pageChangeHandle('next')"
+      @previousPage="pageChangeHandle('previous')"
+      @loadPage="pageChangeHandle"
+    />
   </main>
 </template>
 
 <script>
 import Game from "./Game.vue";
+import BasePagination from "./base/BasePagination.vue";
 
 import * as APICalls from "../APICalls";
 export default {
   name: "MainPage",
-  components: { Game },
+  static: {
+    visibleItemsPerPageCount: 9
+  },
+  components: { Game, BasePagination },
   mounted: async function() {
     this.loading = true;
     try {
+      let visibleItems = this.$options.static.visibleItemsPerPageCount;
       let loadedGames = await APICalls.loadGames();
+      this.pageCount = Math.ceil(loadedGames.length / visibleItems);
       this.games = loadedGames;
+      this.shownGames = loadedGames.slice(0, visibleItems);
+
       this.loading = false;
     } catch (error) {
       this.error = true;
@@ -39,9 +48,12 @@ export default {
   data() {
     return {
       games: [],
+      shownGames: [],
       loading: false,
       error: false,
-      listView: false
+      listView: false,
+      currentPage: 1,
+      pageCount: 0
     };
   },
   methods: {
@@ -50,6 +62,25 @@ export default {
     },
     toggleStyles: function() {
       this.listView ? (this.listView = false) : (this.listView = true);
+    },
+    pageChangeHandle(value) {
+      let visibleItems = this.$options.static.visibleItemsPerPageCount;
+
+      switch (value) {
+        case "next":
+          this.currentPage += 1;
+
+          break;
+        case "previous":
+          this.currentPage -= 1;
+          break;
+        default:
+          this.currentPage = value;
+      }
+      this.shownGames = this.games.slice(
+        this.currentPage,
+        this.currentPage * visibleItems
+      );
     }
   }
 };
