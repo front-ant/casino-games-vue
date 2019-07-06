@@ -1,28 +1,75 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="login-wrapper">
+      <button
+        v-for="tab in tabs"
+        :key="tab"
+        :class="['tab-button', { active: currentTab === tab }]"
+        @click="currentTab = tab"
+      >
+        {{ tab }}
+      </button>
+      <MainPage v-if="loggedIn" @logout="toggleLogin" />
+      <component :is="this.currentTab" class="tab" @submitted="toggleLogin" />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Login from "./components/Login.vue";
+import Register from "./components/Register.vue";
+import MainPage from "./components/MainPage.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HelloWorld
+    MainPage,
+    Login,
+    Register
+  },
+  data() {
+    return {
+      loggedIn: false,
+      currentTab: "Login",
+      tabs: ["Login", "Register"]
+    };
+  },
+  methods: {
+    toggleLogin: function() {
+      this.loggedIn ? (this.loggedIn = false) : (this.loggedIn = true);
+      console.log(this.loggedIn);
+    }
   }
-}
+};
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+header {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+body {
+  text-align: center;
+  font-family: sans-serif;
+}
+
+.tab-button {
+  padding: 6px 10px;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background: #f0f0f0;
+  margin-bottom: -1px;
+  margin-right: -1px;
+}
+.tab-button:hover {
+  background: #e0e0e0;
+}
+.tab-button.active {
+  background: #e0e0e0;
+}
+.tab {
+  border: 1px solid #ccc;
+  padding: 10px;
 }
 </style>
