@@ -1,15 +1,23 @@
 <template>
   <div id="app">
     <div class="login-wrapper" v-if="!loggedIn">
-      <button
-        v-for="tab in tabs"
-        :key="tab"
-        :class="['tab-button', { active: currentTab === tab }]"
-        @click="currentTab = tab"
-      >
-        {{ tab }}
-      </button>
-      <component :is="this.currentTab" class="tab" @submitted="toggleLogin" />
+      <nav>
+        <div class="nav-tab" role="tablist">
+          <a
+            :class="['nav-link', { active: currentTab === tab }]"
+            v-for="tab in tabs"
+            :key="tab"
+            @click="currentTab = tab"
+          >
+            {{ tab }}</a
+          >
+        </div>
+      </nav>
+      <component
+        :is="this.currentTab"
+        class="form-container"
+        @submitted="toggleLogin"
+      />
     </div>
 
     <MainPage v-if="loggedIn" @logout="toggleLogin" />
@@ -44,33 +52,4 @@ export default {
 };
 </script>
 
-<style>
-header {
-  text-align: center;
-}
-body {
-  text-align: center;
-  font-family: sans-serif;
-}
-
-.tab-button {
-  padding: 6px 10px;
-  border-top-left-radius: 3px;
-  border-top-right-radius: 3px;
-  border: 1px solid #ccc;
-  cursor: pointer;
-  background: #f0f0f0;
-  margin-bottom: -1px;
-  margin-right: -1px;
-}
-.tab-button:hover {
-  background: #e0e0e0;
-}
-.tab-button.active {
-  background: #e0e0e0;
-}
-.tab {
-  border: 1px solid #ccc;
-  padding: 10px;
-}
-</style>
+<style src="./app.css"></style>
