@@ -28,6 +28,7 @@
 import Login from "./components/Login.vue";
 import Register from "./components/Register.vue";
 import MainPage from "./components/MainPage.vue";
+import * as APICalls from "./APICalls";
 
 export default {
   name: "app",
@@ -43,10 +44,35 @@ export default {
       tabs: ["Login", "Register"]
     };
   },
+  mounted: function() {
+    const authToken = window.sessionStorage.getItem("auth_token");
+
+    if (authToken) {
+      this.loggedIn = true;
+    }
+  },
   methods: {
-    toggleLogin: function() {
-      this.loggedIn ? (this.loggedIn = false) : (this.loggedIn = true);
-      console.log(this.loggedIn);
+    async toggleLogin(user, pw) {
+      if (!this.loggedIn) {
+        if (user !== "" && pw !== "") {
+          try {
+            APICalls.postUserData(user, pw);
+            let tokenData = await APICalls.getToken();
+            window.sessionStorage.setItem("auth_token", tokenData.auth);
+            this.loggedIn = true;
+            console.log(user);
+          } catch (err) {
+            console.log(err);
+          }
+        } else if (user !== "" && pw === "") {
+          alert("Please enter a password!");
+        } else if (user === "" && pw !== "") {
+          alert("Please enter a username!");
+        } else alert("Please enter a username and password!");
+      } else {
+        this.loggedIn = false;
+        window.sessionStorage.removeItem("auth_token");
+      }
     }
   }
 };

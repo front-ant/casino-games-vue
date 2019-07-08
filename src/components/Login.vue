@@ -4,7 +4,7 @@
     <form>
       <div class="form-group">
         <label for="user">Username</label>
-        <input v-model="user" name="user" class="form-control" />
+        <input type="text" v-model="user" name="user" class="form-control" />
       </div>
       <div class="form-group">
         <label for="password">Password</label>
@@ -40,7 +40,7 @@ export default {
 
   methods: {
     handleLogin: function() {
-      this.$emit("submitted");
+      this.$emit("submitted", this.user, this.password);
     }
   }
 };

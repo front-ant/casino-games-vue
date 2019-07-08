@@ -1,14 +1,15 @@
 export const loadGames = () =>
   fetch("http://localhost:3000/games").then(res => res.json());
 
-export const postUserData = value =>
+export const postUserData = (user, pw) =>
   fetch("http://localhost:3000/users", {
     headers: {
       "Content-Type": "application/json; charset=utf-8"
     },
     method: "POST",
     body: JSON.stringify({
-      name: value
+      name: user,
+      password: pw
     })
   }).then(res => res.json());
 
