@@ -3,25 +3,14 @@
     <div class="login-wrapper" v-if="!loggedIn">
       <nav>
         <div class="nav-tab" role="tablist">
-          <a
-            :class="['nav-link', { active: currentTab === tab }]"
-            v-for="tab in tabs"
-            :key="tab"
-            @click="currentTab = tab"
-          >
-            {{ tab }}</a
-          >
+          <router-link to="/" class="nav-link"> Login</router-link>
+          <router-link to="/register" class="nav-link"> Register</router-link>
         </div>
       </nav>
-      <component
-        :is="this.currentTab"
-        class="form-container"
-        @submitted="toggleLogin"
-      />
+      <router-view></router-view>
     </div>
 
     <MainPage v-if="loggedIn" @logout="toggleLogin" />
-    <router-link :to="{ name: 'Test1' }">home</router-link>
   </div>
 </template>
 
