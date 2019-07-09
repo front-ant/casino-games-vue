@@ -21,11 +21,13 @@
     </div>
 
     <MainPage v-if="loggedIn" @logout="toggleLogin" />
+    <router-link :to="{ name: 'Test1' }">home</router-link>
   </div>
 </template>
 
 <script>
 import Login from "./components/Login.vue";
+import Test1 from "./components/Test1.vue";
 import Register from "./components/Register.vue";
 import MainPage from "./components/MainPage.vue";
 import * as APICalls from "./APICalls";
@@ -35,7 +37,8 @@ export default {
   components: {
     MainPage,
     Login,
-    Register
+    Register,
+    Test1
   },
   data() {
     return {
