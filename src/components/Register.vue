@@ -54,7 +54,9 @@ export default {
   data() {
     return {
       user: "",
-      password: ""
+      password: "",
+      check1: false,
+      check2: false
     };
   },
 
