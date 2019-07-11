@@ -7,7 +7,7 @@
           <router-link to="/register" class="nav-link"> Register</router-link>
         </div>
       </nav>
-      <router-view></router-view>
+      <router-view @submitted="toggleLogin"></router-view>
     </div>
 
     <MainPage v-if="loggedIn" @logout="toggleLogin" />
