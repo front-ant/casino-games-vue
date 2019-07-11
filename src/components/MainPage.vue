@@ -36,26 +36,36 @@ export default {
   mounted: async function() {
     this.loading = true;
     try {
-      let visibleItems = this.$options.static.visibleItemsPerPageCount;
       let loadedGames = await APICalls.loadGames();
-      this.pageCount = Math.ceil(loadedGames.length / visibleItems);
       this.games = loadedGames;
-      this.shownGames = loadedGames.slice(0, visibleItems);
 
       this.loading = false;
     } catch (error) {
       this.error = true;
     }
   },
+  computed: {
+    shownGames: function() {
+      let visibleItems = this.$options.static.visibleItemsPerPageCount;
+      return this.games.slice(
+        this.currentPage * visibleItems - visibleItems,
+        this.currentPage * visibleItems
+      );
+    },
+
+    pageCount: function() {
+      return Math.ceil(
+        this.games.length / this.$options.static.visibleItemsPerPageCount
+      );
+    }
+  },
   data() {
     return {
       games: [],
-      shownGames: [],
       loading: false,
       error: false,
       listView: false,
-      currentPage: 1,
-      pageCount: 0
+      currentPage: 1
     };
   },
   methods: {
@@ -85,11 +95,6 @@ export default {
         default:
           this.currentPage = value;
       }
-      // carve out the portion of the games array that should be displayed per page
-      this.shownGames = this.games.slice(
-        this.currentPage * visibleItems - visibleItems,
-        this.currentPage * visibleItems
-      );
     }
   }
 };
