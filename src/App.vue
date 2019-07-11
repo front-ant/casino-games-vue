@@ -11,6 +11,7 @@
     </div>
 
     <MainPage v-if="loggedIn" @logout="toggleLogin" />
+    <button @click="changeBoolean">{{ this.Boolean }}</button>
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import Test1 from "./components/Test1.vue";
 import Register from "./components/Register.vue";
 import MainPage from "./components/MainPage.vue";
 import * as APICalls from "./APICalls";
+import { mapState } from "vuex";
 
 export default {
   name: "app",
@@ -31,11 +33,12 @@ export default {
   },
   data() {
     return {
-      loggedIn: false,
       currentTab: "Login",
+      loggedIn: false,
       tabs: ["Login", "Register"]
     };
   },
+  computed: mapState(["loggedInStore", "Boolean"]),
   mounted: function() {
     const authToken = window.sessionStorage.getItem("auth_token");
 
@@ -43,6 +46,7 @@ export default {
       this.loggedIn = true;
     }
   },
+
   methods: {
     async toggleLogin(user, pw) {
       if (!this.loggedIn) {
@@ -65,6 +69,9 @@ export default {
         this.loggedIn = false;
         window.sessionStorage.removeItem("auth_token");
       }
+    },
+    changeBoolean() {
+      this.$store.commit("changeBoolean");
     }
   }
 };
