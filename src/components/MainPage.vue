@@ -1,7 +1,7 @@
 <template>
   <main>
     <header>
-      <h1>Welcome!</h1>
+      <h1>Welcome, {{ this.$store.state.currentUser }}!</h1>
     </header>
     <nav>
       <button @click="handleLogout">Logout</button>
@@ -30,7 +30,7 @@ import * as APICalls from "../APICalls";
 export default {
   name: "MainPage",
   static: {
-    visibleItemsPerPageCount: 9
+    visibleItemsPerPageCount: 12
   },
   components: { Game, BasePagination },
   mounted: async function() {
@@ -39,17 +39,17 @@ export default {
       let visibleItems = this.$options.static.visibleItemsPerPageCount;
       let loadedGames = await APICalls.loadGames();
       this.pageCount = Math.ceil(loadedGames.length / visibleItems);
-      this.games = loadedGames;
+      this.setListofGames(loadedGames);
       this.shownGames = loadedGames.slice(0, visibleItems);
 
       this.loading = false;
     } catch (error) {
       this.error = true;
+      console.log(error);
     }
   },
   data() {
     return {
-      games: [],
       shownGames: [],
       loading: false,
       error: false,
@@ -64,6 +64,9 @@ export default {
     },
     toggleStyles: function() {
       this.listView ? (this.listView = false) : (this.listView = true);
+    },
+    setListofGames(gameData) {
+      this.$store.dispatch("addInitialGames", gameData);
     },
     pageChangeHandle(value) {
       let visibleItems = this.$options.static.visibleItemsPerPageCount;

@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     loggedInStore: false,
-    currentUser: ""
+    currentUser: "",
+    gamesList: []
   },
   mutations: {
     logUserIn(state, user) {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     logUserOut(state) {
       state.loggedInStore = false;
       state.currentUser = "";
+    },
+    addInitialGames(state, gameData) {
+      state.gamesList = gameData;
     }
   },
   actions: {
@@ -34,6 +38,9 @@ export default new Vuex.Store({
       commit("logUserOut");
       window.sessionStorage.removeItem("auth_token");
       window.sessionStorage.removeItem("currentUser");
+    },
+    addInitialGames({ commit }, gameData) {
+      commit("addInitialGames", gameData);
     }
   }
 });
