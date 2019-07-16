@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="login-wrapper" v-if="!loggedIn">
+    <div class="login-wrapper" v-if="!loggedInStore">
       <nav>
         <div class="nav-tab" role="tablist">
           <router-link to="/" class="nav-link"> Login</router-link>
@@ -10,8 +10,7 @@
       <router-view @submitted="toggleLogin"></router-view>
     </div>
 
-    <MainPage v-if="loggedIn" @logout="toggleLogin" />
-    <button @click="changeBoolean">{{ this.Boolean }}</button>
+    <MainPage v-if="loggedInStore" @logout="toggleLogin" />
   </div>
 </template>
 
@@ -21,7 +20,7 @@ import Test1 from "./components/Test1.vue";
 import Register from "./components/Register.vue";
 import MainPage from "./components/MainPage.vue";
 import * as APICalls from "./APICalls";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "app",
@@ -34,29 +33,25 @@ export default {
   data() {
     return {
       currentTab: "Login",
-      loggedIn: false,
       tabs: ["Login", "Register"]
     };
   },
-  computed: mapState(["loggedInStore", "Boolean"]),
+  computed: mapState(["loggedInStore"]),
   mounted: function() {
     const authToken = window.sessionStorage.getItem("auth_token");
-
-    if (authToken) {
-      this.loggedIn = true;
-    }
+    const user = window.sessionStorage.getItem("currentUser");
+    if (authToken && user) {
+      this.keepLoggedIn(user);
+    } else return;
   },
 
   methods: {
-    async toggleLogin(user, pw) {
-      if (!this.loggedIn) {
+    ...mapActions(["logUserIn", "logUserOut", "keepLoggedIn"]),
+    toggleLogin(user, pw) {
+      if (!this.loggedInStore) {
         if (user !== "" && pw !== "") {
           try {
-            APICalls.postUserData(user, pw);
-            let tokenData = await APICalls.getToken();
-            window.sessionStorage.setItem("auth_token", tokenData.auth);
-            this.loggedIn = true;
-            console.log(user);
+            this.logUserIn(user, pw);
           } catch (err) {
             console.log(err);
           }
@@ -66,12 +61,8 @@ export default {
           alert("Please enter a username!");
         } else alert("Please enter a username and password!");
       } else {
-        this.loggedIn = false;
-        window.sessionStorage.removeItem("auth_token");
+        this.logUserOut();
       }
-    },
-    changeBoolean() {
-      this.$store.commit("changeBoolean");
     }
   }
 };
